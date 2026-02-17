@@ -3,9 +3,10 @@ import { useRoute } from "wouter";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Minus, Plus, ShoppingBag, Truck, ShieldCheck, Zap } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { formatCurrency } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { ColorSelector } from "@/components/ColorSelector";
 
 export default function ProductDetail() {
   const [match, params] = useRoute("/prodotto/:slug");
@@ -14,6 +15,14 @@ export default function ProductDetail() {
   const { toast } = useToast();
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(0);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (product) {
+      setActiveImage(0);
+      setSelectedColor(null);
+    }
+  }, [product]);
 
   if (isLoading) return (
     <div className="h-screen flex items-center justify-center">
@@ -25,14 +34,18 @@ export default function ProductDetail() {
     <div className="h-screen flex items-center justify-center">Prodotto non trovato</div>
   );
 
-  const images = [product.main_image, ...(product.gallery_images || [])];
+  const currentImage = selectedColor 
+    ? `/img/${product.id}_${selectedColor}.jpg` 
+    : product.main_image;
+
+  const images = [currentImage, ...(product.gallery_images || [])];
 
   const handleAddToCart = () => {
     const cartProduct = {
       id: product.id,
       name: product.nome_modello,
       price: product.prezzo,
-      mainImage: product.main_image,
+      mainImage: currentImage,
       category: product.categoria,
       shortDescription: product.descrizione_breve
     };
@@ -58,6 +71,9 @@ export default function ProductDetail() {
               src={images[activeImage]} 
               alt={product.nome_modello}
               className="w-full h-full object-cover object-center"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = product.main_image;
+              }}
             />
           </motion.div>
           <div className="grid grid-cols-4 gap-4">
@@ -67,7 +83,14 @@ export default function ProductDetail() {
                 onClick={() => setActiveImage(idx)}
                 className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${activeImage === idx ? 'border-primary' : 'border-transparent opacity-70 hover:opacity-100'}`}
               >
-                <img src={img} alt="" className="w-full h-full object-cover" />
+                <img 
+                  src={img} 
+                  alt="" 
+                  className="w-full h-full object-cover" 
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = product.main_image;
+                  }}
+                />
               </button>
             ))}
           </div>
@@ -94,6 +117,14 @@ export default function ProductDetail() {
               "{product.descrizione_breve}"
             </p>
           </div>
+
+          <ColorSelector 
+            productId={product.id}
+            variants={product.color_variants || []}
+            selectedColor={selectedColor}
+            onColorSelect={setSelectedColor}
+            size="md"
+          />
 
           {/* Specs Grid */}
           {product.categoria !== 'Accessori & Sicurezza' && (

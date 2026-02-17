@@ -5,6 +5,8 @@ import { ShoppingBag, ArrowRight, Zap, ShieldCheck } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { ColorSelector } from "./ColorSelector";
 import type { Product } from "@/hooks/use-products";
 
 interface ProductCardProps {
@@ -14,6 +16,11 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
   const { toast } = useToast();
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+
+  const currentImage = selectedColor 
+    ? `/img/${product.id}_${selectedColor}.jpg` 
+    : product.main_image;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation
@@ -21,7 +28,7 @@ export function ProductCard({ product }: ProductCardProps) {
       id: product.id,
       name: product.nome_modello,
       price: product.prezzo,
-      mainImage: product.main_image,
+      mainImage: currentImage,
       category: product.categoria,
       shortDescription: product.descrizione_breve
     };
@@ -42,9 +49,12 @@ export function ProductCard({ product }: ProductCardProps) {
     >
       <Link href={`/prodotto/${product.id}`} className="block relative aspect-[4/3] overflow-hidden bg-white flex items-center justify-center p-4">
         <img 
-          src={product.main_image} 
+          src={currentImage} 
           alt={product.nome_modello}
           className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = product.main_image;
+          }}
         />
         
         {/* Quick Actions Overlay */}
@@ -77,11 +87,18 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
         
-        <p className="text-muted-foreground text-sm line-clamp-2 mb-6 min-h-[2.5rem] italic leading-relaxed">
+        <p className="text-muted-foreground text-sm line-clamp-2 mb-4 min-h-[2.5rem] italic leading-relaxed">
           "{product.descrizione_breve}"
         </p>
+
+        <ColorSelector 
+          productId={product.id}
+          variants={product.color_variants || []}
+          selectedColor={selectedColor}
+          onColorSelect={setSelectedColor}
+        />
         
-        <div className="flex items-end justify-between border-t border-border pt-4">
+        <div className="flex items-end justify-between border-t border-border pt-4 mt-4">
           <div className="flex flex-col">
             <span className="text-lg font-bold text-foreground">
               {formatCurrency(Number(product.prezzo))}

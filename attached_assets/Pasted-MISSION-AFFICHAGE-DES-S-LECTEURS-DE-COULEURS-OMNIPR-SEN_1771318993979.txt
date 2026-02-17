@@ -1,0 +1,88 @@
+MISSION : AFFICHAGE DES SÉLECTEURS DE COULEURS (OMNIPRÉSENCE)
+
+Tu dois corriger et implémenter le système de pastilles/variantes pour le site Cicli Volante. Respecte ces règles strictes :
+
+1. BASES & LOGIQUE
+- Les images de base (ID 1 à 50 pour vélos, 51 à 75 pour accessoires) existent déjà.
+- Les accessoires (ID 51‑75) **ne sont jamais concernés** par les pastilles.
+- Chaque vélo a un ID unique. Les variantes sont ajoutées uniquement si elles existent pour cet ID.
+- Si un ID a variantes, afficher :
+   - Pastille `Base` (représente l’image principale)
+   - Pastilles correspondant aux couleurs exactes (ex: `rosso`, `blu`, `verde`, etc.) selon la liste ci-dessous.
+
+2. LISTE VARIANTES PAR ID (uniquement pour les vélos concernés) :
+1: grigio, rosso  
+2: grigio, verde  
+3: blu, nero, rosso  
+4: arancione  
+5: blu  
+6: verde  
+7: bianco  
+8: nero  
+9: nero  
+10: blu  
+11: verde  
+12: blu  
+13: blu  
+14: blu  
+15: grigio  
+16: blu  
+17: blu, rosso  
+18: bianco  
+19: bianco  
+20: rosso  
+21: bianco  
+22: aucune  
+23: aucune  
+24: bianco  
+25: arancione  
+26: rosso  
+27: verde  
+28: arancione  
+29: blu  
+30: blu  
+31: grigio  
+32: bianco  
+33: blu  
+34: nero  
+35: nero  
+36: nero  
+37: verde  
+38: nero  
+39: aucune  
+40: nero  
+41: bianco  
+42: nero  
+43: nero  
+44: nero  
+45: blu  
+46: verde  
+47: bianco  
+48: bianco  
+50: nero
+
+3. COMPOSANT UI
+- **Catalogue (grille)** : Pastilles petites sous le prix.  
+- **Page produit** : Pastilles plus grandes, juste au-dessus du bouton "Aggiungi al carrello".  
+- Interaction : au survol ou clic sur une pastille, changer l’image principale vers `/img/ID_couleur.jpg`.  
+- Retour à l’image de base possible : pastille `Base` rétablit `/img/ID.jpg`.
+
+4. COULEURS CSS
+- 'blu': #0000FF  
+- 'rosso': #FF0000  
+- 'nero': #000000  
+- 'grigio': #808080  
+- 'verde': #008000  
+- 'bianco': #FFFFFF  
+- 'arancione': #FFA500
+
+5. ROBUSTESSE
+- Vérifie la casse des fichiers (`ID.jpg` ou `ID_couleur.jpg`) pour éviter les erreurs 404.  
+- Ajouter `onError={(e) => e.target.src = '/img/ID.jpg'}` pour chaque image afin de garantir qu’une image cassée ne bloque pas l’affichage.  
+- Les pastilles ne doivent **jamais** apparaître si aucune variante n’est définie.
+
+6. LIVRABLE
+- Toutes les pastilles doivent fonctionner sur le catalogue et la page produit.  
+- Le code doit être prêt à intégrer les fichiers existants, **sans supprimer les images de base**.  
+- Respecter exactement la liste des variantes par ID ci-dessus.  
+- Tester chaque ID pour s’assurer que toutes les images se chargent correctement et que le sélecteur fonctionne.

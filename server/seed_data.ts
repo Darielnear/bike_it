@@ -26,6 +26,55 @@ export function generate75Products(): InsertProduct[] {
     { name: "Accessori & Sicurezza", range: [51, 75], motor: "N/A", battery: 0 }
   ];
 
+  const variantMap: Record<number, string[]> = {
+    1: ["grigio", "rosso"],
+    2: ["grigio", "verde"],
+    3: ["blu", "nero", "rosso"],
+    4: ["arancione"],
+    5: ["blu"],
+    6: ["verde"],
+    7: ["bianco"],
+    8: ["nero"],
+    9: ["nero"],
+    10: ["blu"],
+    11: ["verde"],
+    12: ["blu"],
+    13: ["blu"],
+    14: ["blu"],
+    15: ["grigio"],
+    16: ["blu"],
+    17: ["blu", "rosso"],
+    18: ["bianco"],
+    19: ["bianco"],
+    20: ["rosso"],
+    21: ["bianco"],
+    24: ["bianco"],
+    25: ["arancione"],
+    26: ["rosso"],
+    27: ["verde"],
+    28: ["arancione"],
+    29: ["blu"],
+    30: ["blu"],
+    31: ["grigio"],
+    32: ["bianco"],
+    33: ["blu"],
+    34: ["nero"],
+    35: ["nero"],
+    36: ["nero"],
+    37: ["verde"],
+    38: ["nero"],
+    40: ["nero"],
+    41: ["bianco"],
+    42: ["nero"],
+    43: ["nero"],
+    44: ["nero"],
+    45: ["blu"],
+    46: ["verde"],
+    47: ["bianco"],
+    48: ["bianco"],
+    50: ["nero"]
+  };
+
   const products: InsertProduct[] = [];
 
   categories.forEach(cat => {
@@ -53,6 +102,7 @@ export function generate75Products(): InsertProduct[] {
         motor: isAccessory ? "N/A" : cat.motor,
         batteriaWh: isAccessory ? 0 : cat.battery,
         mainImage: `/img/${i}.jpg`, // Correct relative path for static serving
+        colorVariants: variantMap[i] || [],
         stockQuantity: 12,
         isBestseller: i % 8 === 0,
         isFeatured: i <= 5

@@ -27,6 +27,7 @@ export const products = pgTable("products", {
   galleryImages: jsonb("gallery_images").$type<string[]>().default([]),
   isBestseller: boolean("is_bestseller").default(false),
   isFeatured: boolean("is_featured").default(false),
+  colorVariants: jsonb("color_variants").$type<string[]>().default([]),
   status: text("status").default('active'), // 'active', 'draft', 'out_of_stock'
   createdAt: timestamp("created_at").defaultNow(),
 });
