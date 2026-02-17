@@ -55,14 +55,40 @@ export async function registerRoutes(
 
   // Products
   app.get(api.products.list.path, async (req, res) => {
-    const products = await storage.getProducts(req.query as any);
-    res.json(products);
+    const productsList = await storage.getProducts(req.query as any);
+    const mappedProducts = productsList.map(p => ({
+      ...p,
+      nome_modello: p.name,
+      categoria: p.category,
+      prezzo: Number(p.price),
+      descrizione_breve: p.shortDescription,
+      descrizione_dettagliata: p.descriptionDettagliata,
+      main_image: p.mainImage,
+      gallery_images: p.galleryImages,
+      color_variants: p.colorVariants,
+      original_price: p.originalPrice,
+      batteria_wh: p.batteriaWh
+    }));
+    res.json(mappedProducts);
   });
 
   app.get(api.products.get.path, async (req, res) => {
     const product = await storage.getProductBySlug(req.params.slug);
     if (!product) return res.status(404).json({ message: "Product not found" });
-    res.json(product);
+    
+    res.json({
+      ...product,
+      nome_modello: product.name,
+      categoria: product.category,
+      prezzo: Number(product.price),
+      descrizione_breve: product.shortDescription,
+      descrizione_dettagliata: product.descriptionDettagliata,
+      main_image: product.mainImage,
+      gallery_images: product.galleryImages,
+      color_variants: product.colorVariants,
+      original_price: product.originalPrice,
+      batteria_wh: product.batteriaWh
+    });
   });
 
   app.post(api.products.create.path, isAuthenticated, async (req, res) => {

@@ -20,7 +20,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const currentImage = selectedColor 
     ? `/img/${product.id}_${selectedColor}.jpg` 
-    : product.main_image;
+    : (product.main_image || product.mainImage);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation

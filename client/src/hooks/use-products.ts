@@ -1,46 +1,51 @@
 import { useQuery } from "@tanstack/react-query";
-import productsData from "../data/products.json";
 
 export interface Product {
   id: number;
-  nome_modello: string;
-  brand: string;
-  categoria: string;
-  prezzo: number;
-  descrizione_breve: string;
-  main_image: string;
-  motor?: string;
-  batteria_wh?: number;
-  autonomy?: number;
-  descrizione_dettagliata?: string;
+  name: string;
+  nome_modello?: string; // Compatibility
+  slug: string;
+  category: string;
+  categoria?: string; // Compatibility
+  brand: string | null;
+  price: string;
+  prezzo?: number; // Compatibility
+  originalPrice: string | null;
+  original_price?: string | null; // Compatibility
+  shortDescription: string | null;
+  descrizione_breve?: string | null; // Compatibility
+  fullDescription: string | null;
+  descriptionDettagliata: string | null;
+  descrizione_dettagliata?: string | null; // Compatibility
+  autonomy: number | null;
+  motor: string | null;
+  batteriaWh: number | null;
+  batteria_wh?: number | null; // Compatibility
+  maxSpeed: number | null;
+  weight: string | null;
+  warrantyYears: number | null;
+  stockQuantity: number | null;
+  mainImage: string;
+  main_image?: string; // Compatibility
+  galleryImages: string[] | null;
+  gallery_images?: string[] | null; // Compatibility
+  isBestseller: boolean | null;
+  isFeatured: boolean | null;
+  colorVariants: string[] | null;
+  color_variants?: string[] | null; // Compatibility
+  status: string | null;
+  createdAt: string | null;
 }
 
 export function useProducts(filters?: { category?: string; featured?: boolean; bestseller?: boolean }) {
   return useQuery<Product[]>({
-    queryKey: ["products", filters],
-    queryFn: async () => {
-      let filtered = [...productsData] as Product[];
-      
-      if (filters?.category) {
-        filtered = filtered.filter(p => p.categoria === filters.category);
-      }
-      
-      return filtered;
-    },
+    queryKey: ["/api/products", filters],
   });
 }
 
 export function useProduct(idOrSlug: string | number) {
   return useQuery<Product | null>({
-    queryKey: ["product", idOrSlug],
-    queryFn: async () => {
-      const id = typeof idOrSlug === "string" ? parseInt(idOrSlug) : idOrSlug;
-      if (isNaN(id)) {
-        // Fallback to slug-like matching if needed, but the requirement says IDs 1-75
-        return productsData.find((p: any) => p.id.toString() === idOrSlug) as Product || null;
-      }
-      return productsData.find((p: any) => p.id === id) as Product || null;
-    },
+    queryKey: ["/api/products", idOrSlug],
     enabled: !!idOrSlug,
   });
 }

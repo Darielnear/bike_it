@@ -36,9 +36,9 @@ export default function ProductDetail() {
 
   const currentImage = selectedColor 
     ? `/img/${product.id}_${selectedColor}.jpg` 
-    : product.main_image;
+    : (product.main_image || product.mainImage);
 
-  const images = [currentImage, ...(product.gallery_images || [])];
+  const images = [currentImage, ...(product.gallery_images || product.galleryImages || [])];
 
   const handleAddToCart = () => {
     const cartProduct = {
@@ -104,10 +104,10 @@ export default function ProductDetail() {
           <h1 className="font-display text-4xl md:text-5xl font-bold mb-6 text-foreground">{product.nome_modello}</h1>
           
           <div className="text-3xl font-bold text-foreground mb-4 flex items-center gap-4">
-            {formatCurrency(Number(product.prezzo))}
-            {product.original_price && (
+            {formatCurrency(Number(product.prezzo || product.price))}
+            {(product.original_price || product.originalPrice) && (
               <span className="text-xl text-muted-foreground line-through font-normal">
-                {formatCurrency(Number(product.original_price))}
+                {formatCurrency(Number(product.original_price || product.originalPrice))}
               </span>
             )}
           </div>
