@@ -49,11 +49,11 @@ export function ProductCard({ product }: ProductCardProps) {
     >
       <Link href={`/prodotto/${product.id}`} className="block relative aspect-[4/3] overflow-hidden bg-white flex items-center justify-center p-4">
         <img 
-          src={currentImage} 
+          src={currentImage || product.main_image || ""} 
           alt={product.nome_modello}
           className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
           onError={(e) => {
-            (e.target as HTMLImageElement).src = product.main_image;
+            (e.target as HTMLImageElement).src = product.main_image || "";
           }}
         />
         

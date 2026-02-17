@@ -68,11 +68,11 @@ export default function ProductDetail() {
             className="aspect-[4/3] w-full bg-secondary/30 rounded-2xl overflow-hidden relative"
           >
             <img 
-              src={images[activeImage]} 
+              src={images[activeImage] || product.main_image || ""} 
               alt={product.nome_modello}
               className="w-full h-full object-cover object-center"
               onError={(e) => {
-                (e.target as HTMLImageElement).src = product.main_image;
+                (e.target as HTMLImageElement).src = product.main_image || "";
               }}
             />
           </motion.div>
@@ -84,11 +84,11 @@ export default function ProductDetail() {
                 className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${activeImage === idx ? 'border-primary' : 'border-transparent opacity-70 hover:opacity-100'}`}
               >
                 <img 
-                  src={img} 
+                  src={img || product.main_image || ""} 
                   alt="" 
                   className="w-full h-full object-cover" 
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = product.main_image;
+                    (e.target as HTMLImageElement).src = product.main_image || "";
                   }}
                 />
               </button>
